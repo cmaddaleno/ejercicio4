@@ -9,8 +9,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.js"></script>
         <script src="js/app.js"></script>
         <script src="js/services.js"></script>
-        <script src="js/controllers.js"></script>
+        <script src="js/directives.js"></script>
+        <script src="js/providers.js"></script>
         <script src="js/factory.js"></script>
+        <script src="js/controllers.js"></script>
+
+
     </head>
     <body>
         <div class="jumbotron">
@@ -29,14 +33,88 @@
             <button type="button" ng-click="getCatedratico()">Cargar datos</button>
 
             <div ng-if="static">
-                <label>Nombre </label> {{dev.name}}
+
+                <div class="table-responsive">          
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nickname</th>
+                                <th>Nombre</th>
+                                <th>Pais</th>
+                                <th>Homepage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{userData.login}}</td>
+                                <td>{{userData.name}}</td>
+                                <td>{{userData.location}}</td>
+                                <td><a ng-href="{{userData.url}}" target="_blank"><img src="{{userData.avatar_url}}" width="256" /></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-responsive">          
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>url</th>
+                                <th>Descripcion</th>
+                                <th>Lenguaje</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr ng-repeat="repo in reposData| limitTo:8" ng-click="getCommits(repo.full_name)" >
+                                <td>{{repo.name}}</td>
+                                <td>{{repo.url}}</td>
+                                <td>{{repo.description}}</td>
+                                <td>{{repo.language}}
+                                    <div ng-switch on="repo.language">
+                                        <div ng-switch-when="Java">
+                                            <img src="https://i.blogs.es/e7b69c/java_logo/original.png" width="256" />
+
+                                        </div>
+                                        <div ng-switch-when="C#">
+                                            <img src="https://pluralsight.imgix.net/paths/path-icons/csharp-e7b8fcd4ce.png" width="256" />
+                                        </div>
+                                        <div ng-switch-when="JavaScript">
+                                            <img src="https://www.javatpoint.com/images/javascript/javascript_logo.png" width="256" />
+                                        </div>
+                                    </div>
+
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="table-responsive">          
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Clave sha</th>
+                                    <th>Commiter</th>
+                                    <th>Mensaje</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr ng-repeat="item in commits| limitTo:8"  >
+                                    <td>{{item.sha}}</td>
+                                    <td>{{item.committer.login}}</td>
+                                    <td>{{item.commit.message}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
 
 
 
-                <ul ng-repeat="fact in norrisFacts">
-                    <li><label>{{fact.value}}</label> - <a ng-href="{{fact.url}}" target="_blank">Ver en ChuckNoris facts</a></li>
-                </ul>
+                    </div>
+
+                </div>
             </div>
-        </div>
     </body>
 </html>

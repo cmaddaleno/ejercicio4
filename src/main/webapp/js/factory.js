@@ -8,38 +8,21 @@ var module = angular.module('mpApp.services');
 module.factory('instructorInformationService', function instructorInformationService($http) {
     var instructorInformationService = {};
 
-    function datos(name) {
-
-        var dev = {
-            nickname: '',
-            nombre: '',
-            pais: '',
-            homepage: '',
-            gravatar: ''
-        };
-
+    instructorInformationService.instructorData = function (name, update) {
 
         var url = "https://api.github.com/users/" + name;
 
         $http({method: 'GET',
             url: url})
                 .then(function success(response) {
-
-                    dev.nickname = response.data.login;
-                    dev.nombre = response.data.name;
-                    return dev;
-
-
+                    update(response);
                 }, function error(response) {
-                    return null;
+                    update();
                 });
 
 
 
-    }
-
-    instructorInformationService.instructorData = function (name) {
-        return datos(name);
     };
+    
     return instructorInformationService;
 });

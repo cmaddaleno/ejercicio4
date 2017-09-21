@@ -3,34 +3,40 @@
  * @type type
  */
 angular.module('mpApp.controllers',
-        ['mpApp.services'])
+        ['mpApp.services','mpApp.providers','mpApp.directives'])
 
 
-        .controller('catedraticoController', function ($scope, $log, $http, instructorInformationService) {
+        .controller('catedraticoController', function ($scope, $log, $http, instructorInformationService,repo) {
 
 
-            
-            $scope.obtenerDatos = function (response) {
 
-                $scope.userData = response;
-
+            function obtenerDatos(response) {
+                $scope.userData = response.data;
+                repo.obtenerRepos($scope.userData.repos_url,obtenerRepos);
             };
             
+            function obtenerRepos(response) {
+                $scope.reposData = response.data;
+            };
+            
+            function obtenerListComimits(response) {
+                $scope.commits = response.data;
+            };
+
+
+            $scope.getCommits = function (url) {
+                repo.detalleRepo(url, obtenerListComimits);
+            };
 
             $scope.getCatedratico = function () {
 
                 $scope.userData = {};
+                $scope.reposData = [];
+                $scope.commits = [];
 
+                instructorInformationService.instructorData($scope.search, obtenerDatos);
 
-                $log.warn('nickname' + instructorInformationService.instructorData($scope.search));
-
-                $scope.dev = instructorInformationService.instructorData($scope.search);
-                
                 $scope.static = true;
-                
-                $log.warn($scope.dev.nickname);
-
-
             };
 
         });
